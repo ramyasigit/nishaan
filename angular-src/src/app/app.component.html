@@ -1,0 +1,19 @@
+<div id="mySidenav" class="sidenav" *ngIf="authService.loggedIn()">
+  <a (click)="selectedComponent='profile'" (click)="sidenavColor()" [style.background-color]="profileBack"><span class="glyphicon glyphicon-user"></span> <br> {{currentUser.name}}</a>
+  <hr>
+  <a (click)="selectedComponent='devices'" (click)="sidenavColor()" [style.background-color]="devicesBack"><span class="glyphicon glyphicon-hdd"></span> <br> Devices</a>
+  <a (click)="selectedComponent='tracking'" (click)="sidenavColor()" [style.background-color]="trackingBack"><span class="glyphicon glyphicon-road"></span> <br> Outdoor Tracking</a>
+  <a (click)="selectedComponent='indoorTracking'" (click)="sidenavColor()" [style.background-color]="indoorBack"><span class="glyphicon glyphicon-road"></span> <br> Indoor Tracking</a>
+  <a *ngIf="currentUser.typeOfUser=='admin'" (click)="selectedComponent='devConsole'" (click)="sidenavColor()" [style.background-color]="devConsoleBack"><span class="glyphicon glyphicon-scale"></span> <br> Admin</a>
+  <hr>
+  <a (click)="onLogoutClick()"><span class="glyphicon glyphicon-off"></span> Logout</a>
+  <flash-messages></flash-messages>
+</div>
+<div id="main">
+  <app-login *ngIf="!authService.loggedIn()"></app-login>
+  <app-profile *ngIf="authService.loggedIn() && selectedComponent=='profile'"></app-profile>
+  <app-devices *ngIf="authService.loggedIn() && selectedComponent=='devices'"></app-devices>
+  <app-tracking *ngIf="authService.loggedIn() && selectedComponent=='tracking'"></app-tracking>
+  <app-dev-console *ngIf="authService.loggedIn() && selectedComponent=='devConsole'"></app-dev-console>
+  <app-indoor *ngIf="authService.loggedIn() && selectedComponent=='indoorTracking'"></app-indoor>
+</div>

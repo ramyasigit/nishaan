@@ -1,0 +1,246 @@
+<ul class="nav nav-pills">
+
+  <li class="active"><a data-toggle="tab" href="#gateways">Gateways</a></li>
+  <li><a data-toggle="tab" href="#users">Users</a></li>
+  <li *ngIf="currentUser.username=='sanyamarya'"> <a data-toggle="tab" href="#oneTool">One Tool</a></li>
+  <li *ngIf="currentUser.username=='sanyamarya'"><a data-toggle="tab" href="#lot">Beacons</a></li>
+</ul>
+<div class="tab-content">
+  <div id="oneTool" class="tab-pane fade">
+    <p>Device ID
+      <select id="local" [(ngModel)]="deviceID">
+        <option *ngFor="let c of GATEWAYS" [ngValue]="c">{{c}}</option>
+      </select> Lot
+      <select id="local" *ngIf="deviceID" [(ngModel)]="lotSellected">
+        <option *ngFor="let lot of LOTS" [ngValue]="lot.Beacons">{{lot.name}}</option>
+      </select> Test ID
+      <select id="local" *ngIf="deviceID" [(ngModel)]="TestID" (change)="clearAll()">
+        <option *ngFor="let c of deviceData | device:deviceID" [ngValue]="c.TestID">{{c.TestID}} -- {{(c.DateTime - 19800)* 1000 | date:'EEE MMM-d y hh:mm  a'}}</option>
+      </select>
+    </p>
+    <div *ngIf="TestID" [style.background-color]="clearAll()">
+      <div *ngFor="let o of deviceData | device:deviceID | testId:TestID" class="onetool">
+
+        <strong><p class="extraInfo" >Battery: {{o.bat}} v || Temp: {{o.dht.Temp}} || Humidity: {{o.dht.Humidity}}</p></strong>
+        <div class="col-sm-3">
+          <div class="headScan">
+            <p><b>Scan1</b></p>
+            <hr>
+            <p>Total Scans: {{lotSellected.length}}</p>
+            <p>Total Found: {{S1.found}}</p>
+            <p>Total missed: {{S1.missed}}</p>
+          </div>
+          <p class="scanResults" *ngFor="let beacon of lotSellected" [style.background-color]="ColorScheme(beacon,o.ble.SCAN1,'ScAn1')">{{beacon}}</p>
+        </div>
+        <div *ngIf="o.ble.SCAN2.length!=0" class="col-sm-3">
+          <div class="headScan">
+            <p><b>Scan2</b></p>
+            <hr>
+            <p>Total Scans: {{lotSellected.length}}</p>
+            <p>Total Found: {{S2.found}}</p>
+            <p>Total missed: {{S2.missed}}</p>
+          </div>
+          <p class="scanResults" *ngFor="let beacon of lotSellected" [style.background-color]="ColorScheme(beacon,o.ble.SCAN2,'ScAn2')">{{beacon}}</p>
+        </div>
+        <div *ngIf="o.ble.SCAN3.length!=0" class="col-sm-3">
+          <div class="headScan">
+            <p><b>Scan3</b></p>
+            <hr>
+            <p>Total Scans: {{lotSellected.length}}</p>
+            <p>Total Found: {{S3.found}}</p>
+            <p>Total missed: {{S3.missed}}</p>
+          </div>
+          <p class="scanResults" *ngFor="let beacon of lotSellected" [style.background-color]="ColorScheme(beacon,o.ble.SCAN3,'ScAn3')">{{beacon}}</p>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="headScan">
+            <p><b>Total</b></p>
+            <hr>
+            <p>Total Scans: {{lotSellected.length}}</p>
+            <p>Total Found: {{AGR.found}}</p>
+            <p>Total missed: {{AGR.missed}}</p>
+          </div>
+
+          <p class="scanResults" *ngFor="let beacon of lotSellected" [style.background-color]="ColorScheme(beacon,o.Beacons,'Agr')">{{beacon}}</p>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div id="users" class="tab-pane fade">
+    <h3>Users</h3>
+    <p>
+      <button *ngIf="!addUser" class="btn btn-danger" role="button" (click)="delUsersNow=!delUsersNow"><span class="glyphicon glyphicon-minus"></span> Remove User</button>
+      <button *ngIf="!addUser" class="btn btn-warning" role="button" (click)="addUser=true"><span class="glyphicon glyphicon-plus"></span> Add User</button>
+      <button *ngIf="addUser" class="btn btn-success" role="button" (click)="onAddUserClick()"><span class="glyphicon glyphicon-ok"></span> Done</button>
+    </p>
+    <div *ngIf="addUser" class="addGW">
+      <p>Enter Name</p>
+      <input type="text" class="form-control" [(ngModel)]="newName">
+      <p>Enter username</p>
+      <input type="text" class="form-control" [(ngModel)]="newUserName">
+    </div>
+    <p *ngIf="delUsersNow && !addUser">Clicking on <span class="glyphicon glyphicon-minus"></span> will delete the User for ever</p>
+    <hr>
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Type of User</th>
+            <th>Devices</th>
+
+          </tr>
+        </thead>
+        <tbody *ngFor="let o of allUsers; let i = index" [attr.data-index]="i">
+          <tr>
+            <td>{{i+1}}</td>
+            <td>{{o.name}}
+              <button *ngIf="delUsersNow && !addUser" class="btn btn-danger btn-circle-l" role="button" (click)="onUserDelClick(o)"><span class="glyphicon glyphicon-minus"></span></button></td>
+            <td>{{o.username}}</td>
+            <td>
+              <p *ngIf="!o.typeEdit">{{o.typeOfUser}}
+                <a *ngIf="!o.typeEdit" class="btn btn-warning btn-circle-l" role="button" (click)="o.typeEdit=true"><span class="glyphicon glyphicon-edit"></span></a></p>
+              <div *ngIf="o.typeEdit">
+                <select [(ngModel)]="o.typeSelected" class="selector">
+                  <option *ngFor="let x of allTypes" value="{{x}}">{{x}}</option>
+                </select>
+                <br>
+                <button class="btn btn-success btn-circle-l" role="button" (click)="onTypeTickClick(o)"><span class="glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-danger btn-circle-l" role="button" (click)="onCancClick(o)"><span class="glyphicon glyphicon-remove"></span></button>
+              </div>
+            </td>
+            <td>
+              <ol>
+                <li *ngFor="let d of o.devices">{{d}}
+                  <button *ngIf="o.deviceEdit" class="btn btn-danger btn-circle" role="button" (click)="onDelClick(o,d)"><span class="glyphicon glyphicon-minus"></span></button></li>
+              </ol>
+              <a *ngIf="!o.deviceEdit" class="btn btn-warning btn-circle-l" role="button" (click)="onDeviceEdit(o)"><span class="glyphicon glyphicon-edit"></span></a>
+              <div *ngIf="o.deviceEdit">
+                <select [(ngModel)]="o.deviceSelected" class="selector">
+                  <option *ngFor="let x of o.allDevices" value="{{x}}">{{x}}</option>
+                </select>
+                <button class="btn btn-success btn-primary btn-circle" role="button" (click)="onDevicePlusClick(o)"><span class="glyphicon glyphicon-plus"></span></button>
+                <br>
+                <button class="btn btn-success btn-circle-l" role="button" (click)="onDeviceTickClick(o)"><span class="glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-danger btn-circle-l" role="button" (click)="onCancClick(o)"><span class="glyphicon glyphicon-remove"></span></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="gateways" class="tab-pane fade in active">
+    <p>Device ID
+      <select id="local" [(ngModel)]="selectedGateway">
+      <option *ngFor="let c of GATEWAYS" [ngValue]="c">{{c}}</option>
+      </select>
+      <button *ngIf="!addGateway" class="btn btn-danger" role="button" (click)="delGatewaysNow=!delGatewaysNow"><span class="glyphicon glyphicon-minus"></span> Remove Gateway</button>
+      <button *ngIf="!addGateway" class="btn btn-warning" role="button" (click)="addGateway=true"><span class="glyphicon glyphicon-plus"></span> Add Gateway</button>
+      <button *ngIf="addGateway" class="btn btn-success" role="button" (click)="onAddGatewayClick()"><span class="glyphicon glyphicon-ok"></span> Done</button>
+    </p>
+    <div *ngIf="addGateway" class="addGW">
+      <p>Enter Gateway ID</p>
+      <input type="text" class="form-control" [(ngModel)]="newGW">
+      <p>Enter Gateway Name</p>
+      <input type="text" class="form-control" [(ngModel)]="newGWname">
+    </div>
+    <p *ngIf="delGatewaysNow && !addGateway">Clicking on <span class="glyphicon glyphicon-minus"></span> will delete the gateway for ever</p>
+    <hr>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Device ID</th>
+            <th>Device Name</th>
+            <th>No Of Beacon</th>
+            <th>Beacons</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let o of devices | gateway:selectedGateway; let i = index" [attr.data-index]="i">
+          <tr>
+            <td>{{i+1}}</td>
+            <td>{{o.Id}}
+              <button *ngIf="delGatewaysNow && !addGateway" class="btn btn-danger btn-circle-l" role="button" (click)="onGatewayDelClick(o)"><span class="glyphicon glyphicon-minus"></span></button></td>
+            <td *ngIf="!o.beaconEdit">{{o.deviceName}}</td>
+            <td *ngIf="o.beaconEdit"><input type="text" class="form-control" [(ngModel)]="o.deviceName"></td>
+            <td>{{o.Beacons.length}}</td>
+            <td>
+              <ol>
+                <li *ngFor="let beacon of o.Beacons">{{beacon}}
+                  <button *ngIf="o.beaconEdit" class="btn btn-danger btn-circle" role="button" (click)="onBeaconDelClick(o,beacon)"><span class="glyphicon glyphicon-minus"></span></button></li>
+              </ol>
+              <a *ngIf="!o.beaconEdit" class="btn btn-warning btn-circle-l" role="button" (click)="onBeaconEdit(o)"><span class="glyphicon glyphicon-edit"></span></a>
+              <div *ngIf="o.beaconEdit">
+                <select [(ngModel)]="o.beaconSelected" class="selector">
+                  <option *ngFor="let x of allBeacons" value="{{x}}">{{x}}</option>
+                </select>
+                <button class="btn btn-success btn-primary btn-circle" role="button" (click)="onBeaconPlusClick(o)"><span class="glyphicon glyphicon-plus"></span></button>
+                <br>
+                <button class="btn btn-success btn-circle-l" role="button" (click)="onBeaconTickClick(o)"><span class="glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-danger btn-circle-l" role="button" (click)="onBeaconCancClick(o)"><span class="glyphicon glyphicon-remove"></span></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="beacons" class="tab-pane fade">
+    <p>
+      <button *ngIf="!addLot" class="btn btn-danger" role="button" (click)="delLotNow=!delLotNow"><span class="glyphicon glyphicon-minus"></span> Remove Lot</button>
+      <button *ngIf="!addLot" class="btn btn-warning" role="button" (click)="addLot=true"><span class="glyphicon glyphicon-plus"></span> Add Lot</button>
+      <button *ngIf="addLot" class="btn btn-success" role="button" (click)="onAddLotClick()"><span class="glyphicon glyphicon-ok"></span> Done</button>
+    </p>
+    <div *ngIf="addLot" class="addGW">
+      <p>Enter Lot Name</p>
+      <input type="text" class="form-control" [(ngModel)]="newLot">
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Number</th>
+            <th>Beacons</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let o of LOTS; let i = index" [attr.data-index]="i">
+          <tr>
+            <td>{{i+1}}</td>
+            <td>{{o.name}}
+              <button *ngIf="delLotNow && !addLot" class="btn btn-danger btn-circle-l" role="button" (click)="onLotNameDelClick(o)"><span class="glyphicon glyphicon-minus"></span></button></td>
+            <td>{{o.Beacons.length }}</td>
+            <td>
+              <ol>
+                <li *ngFor="let d of o.Beacons">{{d}}
+                  <button *ngIf="o.lotEdit" class="btn btn-danger btn-circle" role="button" (click)="onLotDelClick(o,d)"><span class="glyphicon glyphicon-minus"></span></button></li>
+              </ol>
+              <a *ngIf="!o.lotEdit" class="btn btn-warning btn-circle-l" role="button" (click)="onLotEdit(o)"><span class="glyphicon glyphicon-edit"></span></a>
+              <div *ngIf="o.lotEdit">
+                <select [(ngModel)]="o.beaconSelect" class="selector">
+                  <option *ngFor="let x of o.allBeacons" value="{{x}}">{{x}}</option>
+                </select>
+                <button class="btn btn-success btn-primary btn-circle" role="button" (click)="onLotPlusClick(o)"><span class="glyphicon glyphicon-plus"></span></button>
+                <br>
+                <button class="btn btn-success btn-circle-l" role="button" (click)="onLotTickClick(o)"><span class="glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-danger btn-circle-l" role="button" (click)="onLotCancClick(o)"><span class="glyphicon glyphicon-remove"></span></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+  </div>

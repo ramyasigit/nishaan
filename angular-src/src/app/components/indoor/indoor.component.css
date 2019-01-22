@@ -1,0 +1,89 @@
+.superRoot {
+  padding: 5px;
+}
+
+.topBar {
+  display: flex;
+  padding: 5px;
+  margin: 5px;
+  /*background-color: #448AFF;
+  color: #FFFFFF;*/
+  border: 1px solid #ccc;
+  box-shadow: #555 1px 1px 8px 1px;
+}
+
+.RoomOne {
+  flex: 4;
+}
+
+.RoomTwo {
+  flex: 4;
+}
+
+.btn {
+  flex: 1;
+  font-size: 200%;
+}
+
+.super {
+  padding: 5px;
+  margin: 5px;
+  display: flex;
+}
+
+.left {
+  height: 300px;
+  width: 25%;
+  margin-right: 150px;
+  padding: 5px;
+  margin: 5px;
+  flex: 1;
+  border: 1px solid #ccc;
+  box-shadow: #555 1px 1px 8px 1px;
+}
+
+.right {
+  height: 300px;
+  padding: 5px;
+  margin: 5px;
+  width: 25%;
+  margin-left: 150px;
+  flex: 1;
+  border: 1px solid #ccc;
+  box-shadow: #555 1px 1px 8px 1px;
+}
+
+.footer {
+  border: 1px solid #ccc;
+  box-shadow: #555 1px 1px 8px 1px;
+}
+
+#local {
+  margin: 5px;
+  width: 60%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  line-height: 3;
+  background-size: 30px;
+  background-image: url('https://image.flaticon.com/icons/png/128/254/254032.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+img {
+  width: 100%;
+}
+
+.block {
+  display: inline-block;
+  padding: 5px;
+  height: 90px;
+  width: 90px;
+  text-align: center;
+}

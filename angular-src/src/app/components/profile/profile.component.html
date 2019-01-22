@@ -1,0 +1,42 @@
+<div class="panel-group" id="accordion">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+       <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Basic Information</a>
+     </h4>
+    </div>
+    <div id="collapse1" class="panel-collapse collapse in">
+      <div class="panel-body">
+        <h3>{{currentUser.name}}</h3>
+        <h4><b>User Name: </b> {{currentUser.username}}</h4>
+        <h4><b>User Type: </b> {{currentUser.typeOfUser}}</h4>
+      </div>
+      <div class="panel-footer">
+        <button *ngIf="!changePass" class="btn btn-warning" role="button" (click)="changePass=true"><span class="glyphicon glyphicon-edit"></span> Change Password</button>
+        <div *ngIf="changePass" class="changePass">
+          <p><span class="glyphicon glyphicon-asterisk"></span> Current Password</p>
+          <input type="password" class="form-control" [(ngModel)]="currentPassword">
+          <p><span class="glyphicon glyphicon-eye-open"></span> New Password</p>
+          <input type="password" class="form-control" [(ngModel)]="newPassword">
+          <hr>
+          <button type="submit" class="btn btn-success btn-block" (click)="onPChangeSubmit()"><span class="glyphicon glyphicon-off"></span> Change Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Devices</a>
+  </h4>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse">
+      <div class="panel-body">
+        <ol>
+          <li *ngFor="let device of currentUser.devices">{{device}}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+{
+  "name": "AccessControl",
+  "license": "MIT",
+  "version": "1.0.0",
+  "description": "Middleware and Front-end for Access Control",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "cors": "*",
+    "express": "*",
+    "jsonwebtoken": "^7.4.3",
+    "mobile-locator": "^0.6.2",
+    "mongoose": "*",
+    "mqtt": "*",
+    "node-nmea": "*",
+    "nodemon": "*",
+    "passport": "*",
+    "passport-jwt": "*",
+    "request": "^2.88.0",
+    "sleep": "*",
+    "socket.io": "*",
+    "thread-sleep": "^2.0.0"
+  },
+  "author": "Sanyam Arya",
+  "devDependencies": {
+    "@angular/cli": "*"
+  }
+}

@@ -1,0 +1,32 @@
+<p>Search
+  <select [(ngModel)]="selectedValue">
+  <option *ngFor="let c of currentUser.devices" [ngValue]="c">{{c}}</option>
+</select>
+</p>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Device ID</th>
+        <th>Device Name</th>
+        <th>No Of Items</th>
+        <th>Items</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let o of gateways | device:selectedValue; let i = index" [attr.data-index]="i">
+      <tr>
+        <td>{{i+1}}</td>
+        <td>{{o.deviceID}}</td>
+        <td>{{o.deviceName}}</td>
+        <td>{{o.noOfBeacons}}</td>
+
+        <td>
+          <ol>
+            <li *ngFor="let beacons of o.Beacons">{{beacons}}</li>
+          </ol>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

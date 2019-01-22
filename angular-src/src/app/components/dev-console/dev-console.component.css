@@ -1,0 +1,108 @@
+th {
+  background-color: #00838F;
+  color: #FFFFFF;
+}
+
+table, td, tr, th {
+  border: 1px solid #00838F;
+}
+.extraInfo{
+  margin: 2px;
+  padding: 3px;
+  background-color: #ECEFF1;
+  border: 1px solid #ccc;
+  box-shadow: #555 1px 1px 4px 1px;
+}
+#inner {
+  margin: 5px;
+  width: 100%;
+  padding: 2px;
+}
+
+#local {
+  margin: 5px;
+  width: 25%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  box-shadow: #555 1px 1px 8px 1px;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  line-height: 3;
+  background-size: 30px;
+  background-image: url('https://image.flaticon.com/icons/png/128/254/254032.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+/*
+#local:focus {
+  width: 45%;
+}*/
+
+option {
+  padding: 5px;
+}
+
+.btn-circle {
+  border: 1px solid #333;
+  box-shadow: #555 1px 1px 8px 1px;
+  width: 20px;
+  height: 20px;
+  padding: 3px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 9px;
+  line-height: 1.42857;
+}
+
+.btn-circle-l {
+  margin: 2px;
+  border: 4px solid #333;
+  box-shadow: #555 1px 1px 8px 1px;
+  width: 40px;
+  height: 40px;
+  padding: 6px 6px;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.btn {
+  border: 1px solid #333;
+  box-shadow: #555 1px 1px 8px 1px;
+}
+
+.addGW {
+  padding: 12px;
+  background-color: #ECEFF1;
+}
+
+.col-sm-3 {
+  border: 2px solid #333;
+  box-shadow: #555 2px 2px 8px 2px;
+  margin: 5px;
+  padding: 10px;
+  width: 23%;
+}
+
+.nav {
+  box-shadow: #555 1px 1px 4px 1px;
+  margin-bottom: 5px;
+}
+
+.scanResults {
+  text-align: center;
+  border: 1px solid #333;
+  margin: 1px;
+  padding: 3px;
+}
+.headScan{
+  text-align: center;
+  border: 1px solid #333;
+  margin: 1px;
+  padding: 3px;
+}

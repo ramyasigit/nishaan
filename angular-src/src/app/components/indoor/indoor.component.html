@@ -1,0 +1,41 @@
+<div class="superRoot">
+  <div class="topBar">
+    <p class="RoomOne">Location One Gateway
+      <select id="local" [(ngModel)]="selectedRoomOne">
+        <option *ngFor="let c of gateways" [ngValue]="c.deviceID">{{c.deviceName}} - - {{c.deviceID}}</option>
+    </select></p>
+
+    <p class="RoomTwo">Location Two Gateway
+      <select id="local" [(ngModel)]="selectedRoomTwo">
+        <option *ngFor="let c of gateways" [ngValue]="c.deviceID">{{c.deviceName}} - - {{c.deviceID}}</option>
+    </select></p>
+
+
+    <button class="btn btn-warning" role="button" [style.background-color]="startStopColor" (click)="startStop()"> {{STARTSTOP}}</button>
+
+
+  </div>
+
+  <div class="super">
+    <div class="left">
+      <h3>Location 1</h3>
+      <div class="block" *ngFor="let c of indoorData.GW1">
+        <img src="assets/beacons/{{c}}.png" alt="loading Image">
+        <p class="name">{{c}}</p>
+      </div>
+
+    </div>
+    <div class="right">
+      <h3>Location 2</h3>
+      <div class="block" *ngFor="let c of indoorData.GW2">
+        <img src="assets/beacons/{{c}}.png" alt="loading Image">
+        <p class="name">{{c}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+
+
+  </div>
+</div>

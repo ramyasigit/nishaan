@@ -1,0 +1,190 @@
+<div id="map-canvas" class="mapintosh">
+</div>
+<!-- <button class="btn btn-primary" role="button" (click)="gettingDirections()">Trace Path</button> -->
+<!-- <p> -->
+<span class="belowMap" *ngIf="selfSelectedGateways.length==0" >
+  <button [style.background-color]="liveOrHistoryColor" class="btn btn-default liveHistoryButton" role="button" (click)="liveOrHistory()">Show {{LiveORHistory}}</button>
+  <!-- <strong class="Status"> {{ShowLiveOrHistory}} </strong> -->
+  <button class="btn btn-warning liveHistoryButton" role="button" (click)="clear()">Clear</button>
+
+</span>
+<div class="btnContainer" *ngIf="LiveORHistory=='History'">
+  <!-- later we have to constrain it to ony the gateways which are associated to the current user  -->
+  <span class="gatewayBtns" *ngFor="let c of gateways">
+  <b>{{c.deviceName}} </b> <button class="btn btn-default" role="button" (click)="onGatewayButtonCLick(c)" [style.background-color]="c.backColor"> {{c.text}}</button>
+  <img [src]="c.image" alt="">
+  </span>
+</div>
+<!-- <button class="btn btn-default" role="button" (click)="goNow()"> GO!</button> -->
+<div *ngIf="devicesListForTracking.length!=0">
+  <button *ngIf="devicesListForTracking.length!=0" class="btn btn-warning" role="button" (click)="clear()"><span class="glyphicon glyphicon-minus"></span> Clear</button> --------------------- {{ShowLiveOrHistory}} ---------------------
+  <button *ngIf="LiveORHistory=='Live'" class="btn btn-primary" role="button" (click)="gettingDirections()">Trace Path</button>
+</div>
+<!-- </p> -->
+<!-- <p *ngFor="let alpha of selfSelectedGateways">{{alpha.deviceName}}</p> -->
+
+<!-- <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="checkGPS" (change)="loadMarkersandCircles()">GPS Location</label>
+  <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="checkGSM" (change)="loadMarkersandCircles()">GSM Location</label> -->
+
+
+
+<div class="panel-group" id="accordion">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+       <a *ngIf="LiveORHistory=='History'" data-toggle="collapse" data-parent="#accordion" href="#collapse1">Devices (Live)</a>
+        <a *ngIf="LiveORHistory=='Live'" data-toggle="collapse" data-parent="#accordion" href="#collapse1">Devices (History)</a>
+     </h4>
+    </div>
+    <div id="collapse1" class="panel-collapse collapse in">
+      <div class="panel-body alpha" *ngIf="LiveORHistory=='History'">
+        <!--  For testing purpose -->
+        <!-- <tbody *ngFor="let o of gateways | device:selectedDeviceID; let i = index" [attr.data-index]="i"> -->
+        <div class="dataView" *ngFor="let o of showGateways; let i = index" [attr.data-index]="i">
+          <div class="lineOne">
+            <p id="index">{{i+1}}</p>
+            <p id="deviceID"><b>Device:</b> {{o.deviceName}} <b> <br> ID:</b> {{o.deviceID}}</p>
+            <p id="beaconsCount"><b>Items:</b> {{o.noOfBeacons}}</p>
+          </div>
+          <div class="lineTwo">
+            <!-- <p><b>Items :</b></p>
+            <ol id="beaconList">
+              <li *ngFor="let beacons of o.Beacons ; let j = index" [attr.data-index]="j">{{beacons}}</li>
+            </ol> -->
+            <div class="srcList">
+              <b>Items at Source:</b>
+              <ol id="beaconList">
+                <li *ngFor="let beacons of o.currentTrack[0].BleAgrStart ; let j = index" [attr.data-index]="j">{{beacons.name}}</li>
+              </ol>
+            </div>
+            <div class="destList">
+              <b>Items at Destination:</b>
+              <ol id="beaconList">
+                  <li *ngFor="let beacons of o.currentTrack[0].BleAgrStop ; let j = index" [attr.data-index]="j">{{beacons.name}}</li>
+              </ol>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="panel-body alpha" *ngIf="LiveORHistory=='Live'">
+        <!--  For testing purpose -->
+        <!-- <tbody *ngFor="let o of gateways | device:selectedDeviceID; let i = index" [attr.data-index]="i"> -->
+
+        <div class="dataView" *ngFor="let o of gateways; let i = index" [attr.data-index]="i">
+          <img [src]="o.image" alt="">
+          <div class="lineOne">
+            <p id="index">{{i+1}}</p>
+            <p id="deviceID"><b>Device:</b> {{o.deviceName}} <b> <br> ID:</b> {{o.deviceID}}</p>
+
+          </div>
+          <div *ngIf="o.selectedTrack" class="lineTwo">
+            <div class="srcList">
+              <b>Items at Source:</b>
+              <ol id="beaconList">
+                <li *ngFor="let beacons of o.selectedTrack.BleAgrStart ; let j = index" [attr.data-index]="j">{{beacons.name}}</li>
+              </ol>
+            </div>
+            <div class="destList">
+              <b>Items at Destination:</b>
+              <ol id="beaconList">
+                <li *ngFor="let beacons of o.selectedTrack.BleAgrStop ; let j = index" [attr.data-index]="j">{{beacons.name}}</li>
+              </ol>
+            </div>
+
+          </div>
+
+          Select Track to show <br>
+          <select [(ngModel)]="o.selectedTrack" (change)="gettingDirections(o)">
+            <option *ngFor="let c of o.tracks" [ngValue]="c">{{(c.startTime - 3600)* 1000 | date:'MMM-d y =>hh:mm a'}} - {{(c.stopTime - 3600)* 1000 | date:'hh:mm a<='}}</option>
+            <!-- <option *ngFor="let c of o.tracks; let j = index" [attr.data-index]="j" [ngValue]="c">Track - {{j+1}}
+              => {{(c.startTime - 19800)* 1000 | date:'EEE MMM-d y hh:mm  a'}} -
+              {{(c.stopTime - 19800)* 1000 | date:'EEE MMM-d y hh:mm  a'}} </option> -->
+
+          </select>
+        </div>
+      </div>
+      <div class="panel-footer">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Data</a>
+  </h4>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse">
+      <div class="panel-body">
+        Select Device ID
+        <select id="local" [(ngModel)]="selectedDeviceID">
+          <option *ngFor="let c of gateways" [ngValue]="c.deviceID">{{c.deviceName}}</option>
+      </select> Select Test ID
+        <select id="local" [(ngModel)]="selectedTestID" (change)="loadMarkersandCircles()">
+          <option *ngFor="let c of deviceData | device:selectedDeviceID" [ngValue]="c.TestID">{{c.TestID}} -- {{(c.DateTime - 19800)* 1000 | date:'EEE MMM-d y hh:mm  a'}}</option>
+        </select>
+        <div class="dataView" *ngFor="let o of deviceData | device:selectedDeviceID | testId:selectedTestID; let i = index" [attr.data-index]="i">
+          <div class="lineOne">
+            <p id="index2">{{i+1}} || <b>Device:</b> {{o.name}}</p>
+            <p id="deviceID"><b>  ID:</b> {{o.deviceID}} || <b>  Test ID:</b> {{o.TestID}} || <b>Time:</b> {{(o.DateTime - 19800) * 1000 | date:'EEE MMM-d y hh:mm a'}} </p>
+            <div id="battery"> <b>Beacons Scanned: </b>{{o.noOfBeacons}}
+            </div>
+          </div>
+          <div class="lineTwo2">
+            <div class="One">
+              <p><b>GPS Latitude: </b>{{o.gps.latitude}} || <b>GPS Latitude: </b>{{o.gps.longitude}} <br>
+                <b> GPS Latitude: </b>{{o.gsm.latitude}} || <b>GPS Latitude: </b>{{o.gsm.longitude}}
+              </p>
+            </div>
+            <div class="Two">
+              <p> <b>Temperature: </b> {{o.dht.Temp}} degree celsius <br>
+                <b>Humidity: </b> {{o.dht.Humidity}} % <br></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Test ID</th>
+                <th>Device ID</th>
+                <th>Device Name</th>
+                <th>Battery (volts) </th>
+                <th>Beacons Scanned</th>
+                <th *ngIf="checkGPS">GPS Latitude</th>
+                <th *ngIf="checkGPS">GPS Longitude</th>
+                <th *ngIf="checkGSM">GSM Latitude</th>
+                <th *ngIf="checkGSM">GSM Longitude</th>
+                <th>Temperature (Celsius) </th>
+                <th>Humidity</th>
+                <th>Date Time</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let o of deviceData | device:selectedDeviceID | testId:selectedTestID; let i = index" [attr.data-index]="i">
+              <tr>
+                <td>{{i+1}}</td>
+                <td>{{o.TestID}}</td>
+                <td>{{o.deviceID}}</td>
+                <td>{{o.name}}</td>
+                <td>{{o.bat}}</td>
+                <td>{{o.noOfBeacons}}</td>
+                <td *ngIf="checkGPS">{{o.gps.latitude}}</td>
+                <td *ngIf="checkGPS">{{o.gps.longitude}}</td>
+                <td *ngIf="checkGSM">{{o.gsm.latitude}}</td>
+                <td *ngIf="checkGSM">{{o.gsm.longitude}}</td>
+                <td>{{o.dht.Temp}}</td>
+                <td>{{o.dht.Humidity}}</td>
+                <td>{{(o.DateTime - 19800) * 1000 | date:'EEE MMM-d y hh:mm a'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>

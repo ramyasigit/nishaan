@@ -1,0 +1,45 @@
+a{
+  cursor: pointer;
+}
+.sidenav {
+  text-align: center;
+  box-shadow: #555 2px 2px 12px 2px;
+  height: 100%;
+  width: 7%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  background-color: #78909C;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 10px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #f1f1f1;
+  display: block;
+  transition: 0.3s;
+  font-size: 120%;
+}
+
+.sidenav a:hover, .offcanvas a:focus {
+  color: #ffffff;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  margin-left: 7%;
+  padding: 1%;
+  padding-top: 10px;
+  width: 93%;
+}

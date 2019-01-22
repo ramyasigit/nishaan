@@ -1,0 +1,10 @@
+.form {
+  text-align: center;
+  opacity: 80%;
+  padding: 20px;
+  background-color: #78909C;
+  color: #FFFFFF;
+  font-size: 100%;
+  margin: 12% 28%;
+  box-shadow: #555 1px 1px 8px 1px;
+}
